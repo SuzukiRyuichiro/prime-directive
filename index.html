@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <title>Word Reveal Game</title>
     <style>
+      div#sentence {
+        margin: auto;
+        margin-bottom: 4rem;
+      }
+      span {
+        font-size: 4rem;
+      }
       .hidden {
         background-color: black;
         color: black;
@@ -12,39 +19,46 @@
         background-color: transparent;
         color: black; /* Changed to black */
       }
+      input {
+        font-size: 4rem;
+        padding: 1rem;
+        width: auto;
+      }
     </style>
   </head>
   <body>
     <div id="sentence">
       <!-- JavaScript will populate this -->
     </div>
-    <input
-      type="text"
-      id="inputField"
-      placeholder="Type words to reveal and press Enter"
-    />
+    <input type="text" id="inputField" placeholder="Try yourself" />
     <script>
       const phrase =
         "Regardless of what we discover, we understand and truly believe that everyone did the best job they could, given what they knew at the time, their skills and abilities, the resources available, and the situation at hand.";
-      const words = phrase.split(" ");
+      const wordsWithPunctuation = phrase
+        .split(/(\w+|\W+)/)
+        .filter((item) => item.trim().length > 0);
       const sentenceDiv = document.getElementById("sentence");
       const inputField = document.getElementById("inputField");
 
       function initialize() {
         sentenceDiv.innerHTML = "";
-        words.forEach((word) => {
+        wordsWithPunctuation.forEach((word) => {
           const span = document.createElement("span");
-          span.classList.add("hidden");
+          if (word !== ", " && word !== ".") {
+            span.classList.add("hidden");
+          }
           span.textContent = word + " ";
           sentenceDiv.appendChild(span);
         });
       }
 
       function revealWords() {
-        const inputWords = inputField.value.split(" ");
+        const inputWords = inputField.value
+          .split(" ")
+          .map((w) => w.toLowerCase());
         const spans = sentenceDiv.querySelectorAll("span");
         spans.forEach((span, index) => {
-          if (inputWords.includes(words[index])) {
+          if (inputWords.includes(wordsWithPunctuation[index].toLowerCase())) {
             span.classList.replace("hidden", "revealed");
           }
         });
