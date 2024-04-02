@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Word Reveal Game</title>
+    <style>
+      .hidden {
+        background-color: black;
+        color: black;
+      }
+      .revealed {
+        background-color: transparent;
+        color: black; /* Changed to black */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="sentence">
+      <!-- JavaScript will populate this -->
+    </div>
+    <input
+      type="text"
+      id="inputField"
+      placeholder="Type words to reveal and press Enter"
+    />
+    <script>
+      const phrase =
+        "Regardless of what we discover, we understand and truly believe that everyone did the best job they could, given what they knew at the time, their skills and abilities, the resources available, and the situation at hand.";
+      const words = phrase.split(" ");
+      const sentenceDiv = document.getElementById("sentence");
+      const inputField = document.getElementById("inputField");
+
+      function initialize() {
+        sentenceDiv.innerHTML = "";
+        words.forEach((word) => {
+          const span = document.createElement("span");
+          span.classList.add("hidden");
+          span.textContent = word + " ";
+          sentenceDiv.appendChild(span);
+        });
+      }
+
+      function revealWords() {
+        const inputWords = inputField.value.split(" ");
+        const spans = sentenceDiv.querySelectorAll("span");
+        spans.forEach((span, index) => {
+          if (inputWords.includes(words[index])) {
+            span.classList.replace("hidden", "revealed");
+          }
+        });
+      }
+
+      initialize();
+
+      // Only reveal words when Enter is pressed
+      inputField.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          revealWords();
+          inputField.value = ""; // Clear the input field after pressing Enter
+        }
+      });
+    </script>
+  </body>
+</html>
